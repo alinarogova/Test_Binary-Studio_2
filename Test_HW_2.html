@@ -1,0 +1,43 @@
+<script>
+'use strict';
+class Fighter {
+	constructor (name, power, health){
+		this.name = name;
+		this.power = power;
+		this.health = health;
+	}
+	setDamage(damage){
+		this.health = this.health - damage;
+		console.log(` health: ${this.health}`);
+	}
+	
+	hit(enemy, point){
+		enemy.setDamage( point * this.power);
+	}
+}
+
+class ImprovedFighter extends Fighter{
+	doubleHit(point){ 
+		super.hit(this, 2*point);
+	}
+}
+
+var fighter = new Fighter("fighter1", 20, 100);
+var improvedFighter = new ImprovedFighter("fighter2", 21, 150);
+
+const fight = (fighter1, fighter2, ...point) =>{
+	let i=0;
+
+	for (let value of point) {
+		i++;
+		if (i%2) fighter1.hit(fighter2, value);
+		else fighter2.hit(fighter1, value);
+
+		if (fighter1.health <= 0 ) return fighter1.name;
+		if (fighter2.health <= 0 ) return fighter2.name;
+	}
+}
+
+let loser = fight(fighter, improvedFighter, 1, 2, 3, 4, 5, 6);
+if (loser) console.log(`${loser} die`);
+</script>
